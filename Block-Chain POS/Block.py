@@ -12,6 +12,12 @@ class Block():
         self.forger = forger
         self.signature = ''
 
+    @staticmethod
+    def genesis():
+        genesisBlock = Block([], 'genesishash','genesis',0)
+        genesisBlock.timestamp = 0
+        return genesisBlock
+
     def toJson(self):
         data = {}
         data['blockCount'] = self.blockCount
