@@ -7,7 +7,7 @@ class AccountModel:
     def addAccount(self,publicKeyString):
         if not publicKeyString in self.accounts:
             self.accounts.append(publicKeyString)
-            self.accounts[publicKeyString]= 0
+            self.balances[publicKeyString]= 0
 
     def getBalance(self, publicKeyString):
         if publicKeyString not in self.accounts:
