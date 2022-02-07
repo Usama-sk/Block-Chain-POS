@@ -1,3 +1,6 @@
+from msvcrt import LK_LOCK
+
+
 class AccountModel:
 
     def __init__(self):
@@ -18,3 +21,6 @@ class AccountModel:
         if publicKeyString not in self.accounts:
             self.addAccount(publicKeyString)
         self.balances[publicKeyString] += amount
+
+
+
