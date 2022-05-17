@@ -10,7 +10,7 @@
             "request": "launch",
             "program": "Main.py",
             "console": "integratedTerminal",
-            "args": ["localhost" , "10001"]
+            "args": ["localhost" , "10001" ,"5000"]
            
         }
     ]

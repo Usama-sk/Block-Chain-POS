@@ -14,7 +14,7 @@ class Block():
 
     @staticmethod
     def genesis():
-        genesisBlock = Block([], 'genesishash','genesis',0)
+        genesisBlock = Block([], 'genesisHash', 'genesis', 0)
         genesisBlock.timestamp = 0
         return genesisBlock
 

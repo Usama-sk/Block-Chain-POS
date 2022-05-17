@@ -1,8 +1,5 @@
 
 
-from numpy import insert
-
-
 class TransactionPool():
 
     def __init__(self):
@@ -17,8 +14,8 @@ class TransactionPool():
                 return True
         return False
 
-    def removeFromPool(self,transactions):
-        newPoolTransactions =[]
+    def removeFromPool(self, transactions):
+        newPoolTransactions = []
         for poolTransaction in self.transactions:
             insert = True
             for transaction in transactions:
@@ -27,3 +24,9 @@ class TransactionPool():
             if insert == True:
                 newPoolTransactions.append(poolTransaction)
         self.transactions = newPoolTransactions
+
+    def forgingRequired(self):
+        if len(self.transactions) >= 1:
+            return True
+        else:
+            return False

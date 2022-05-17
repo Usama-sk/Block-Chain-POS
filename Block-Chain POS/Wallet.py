@@ -16,7 +16,6 @@ class Wallet():
             key = RSA.importKey(keyfile.read())
         self.keyPair = key
 
-
     def sign(self, data):
         dataHash = BlockchainUtils.hash(data)
         signatureSchemeObject = PKCS1_v1_5.new(self.keyPair)
