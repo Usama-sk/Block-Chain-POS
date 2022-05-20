@@ -1,3 +1,4 @@
+import re
 from Block import Block
 from BlockchainUtils import BlockchainUtils
 from AccountModel import AccountModel
@@ -80,3 +81,32 @@ class Blockchain():
             self.blocks[-1].payload()).hexdigest()
         nextForger = self.pos.forger(lastBlockHash)
         return nextForger
+
+    def createBlock(self,transactionFromPool, forgerWallet):
+        coveredTransactions = self.getCoveredTransactionSet(
+            transactionFromPool)
+        self.executeTransactions(coveredTransactions)
+        newBlock = forgerWallet.createBlock(coveredTransactions,BlockchainUtils.hash(
+            self.blocks[-1].payload()).hexdigest(),len(self.blocks))
+        self.blocks.append(newBlock)
+        return newBlock    
+
+    def transactionExist(self, transaction):
+        for block in self.blocks:
+            for blockTransaction in block.transactions:
+                if transaction.equals(blockTransaction):
+                    return True
+
+    def forgerValid(self,block):
+        forgerPublicKey = self.pos.forger(block.lastHash)
+        proposeBlockForger = block.forger
+        if forgerPublicKey == proposeBlockForger:
+            return True
+        else:
+            return False
+
+    def transactionValid(self, transactions):
+        coveredTransaction = self.getCoveredTransactionSet(transactions)
+        if len(coveredTransaction)== len(transactions):
+            return True
+        return False 

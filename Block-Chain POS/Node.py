@@ -1,3 +1,4 @@
+from email import message
 from Blockchain import Blockchain
 from TransactionPool import TransactionPool
 from Wallet import Wallet
@@ -35,7 +36,8 @@ class Node():
         signatureValid = Wallet.signatureValid(
             data, signature, signerPublicKey)
         transactionExists = self.transactionPool.transactionExists(transaction)
-        if not transactionExists and signatureValid:
+        transactionInBlock = self.blockchain.transactionExist(transaction)
+        if not transactionExists and not transactionInBlock and signatureValid:
             self.transactionPool.addTransaction(transaction)
             message = Message(self.p2p.socketConnector,
                               'TRANSACTION', transaction)
@@ -45,9 +47,33 @@ class Node():
             if forgingRequired:
                 self.forge()
 
+    def handleBlock(self,block):
+        forger = block.forger
+        blockHash = block.payload()
+        signature = block.signature
+
+        blockCountValid = self.blockchain.blockCountValid(block)
+        lastBlockHashValid = self.blockchain.lastBlockHashValid(block)
+        forgerValid = self.blockchain.transactionValid
+        transactionValid = self.blockchain.transactionValid(block.transactions)
+
+        signatureValid = Wallet.signatureValid(blockHash,signature,forger)
+        if lastBlockHashValid and forgerValid and transactionValid and signatureValid:
+            self.blockchain.addBlock(block)
+            self.transactionPool.removeFromPool(block.transactions)
+            message = Message(self.p2p.socketConnector, 'Block', block)
+            encodedMessage = BlockchainUtils.encode(message)
+            self.p2p.broadcast(encodedMessage)
+
     def forge(self):
         forger = self.blockchain.nextForger()
         if forger == self.wallet.publicKeyString():
-            print('i am the forger')
+            print('i am the next forger')
+            block =self.blockchain.createBlock(
+                self.transactionPool.transactions, self.wallet)
+            self.transactionPool.removeFromPool(block.transactions)
+            message = Message(self.p2p.socketConnector,'BLOCK',block)
+            encodedMessage = BlockchainUtils.encode(message)
+            self.p2p.broadcast(encodedMessage)
         else:
-            print('i am not the forger')
+            print('i am not the next forger')

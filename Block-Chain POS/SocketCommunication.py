@@ -1,3 +1,4 @@
+from numpy import block
 from p2pnetwork.node import Node
 from PeerDiscoveryHandler import PeerDiscoveryHandler
 from SocketConnector import SocketConnector
@@ -36,6 +37,9 @@ class SocketCommunication(Node):
         elif message.messageType == 'TRANSACTION':
             transaction = message.data
             self.node.handleTransaction(transaction)
+        elif message.messageType == 'BLOCK':
+            block = message.data
+            self.node.handleBlock(block)
 
     def send(self, receiver, message):
         self.send_to_node(receiver, message)
