@@ -1,4 +1,3 @@
-import re
 from Block import Block
 from BlockchainUtils import BlockchainUtils
 from AccountModel import AccountModel
@@ -82,31 +81,31 @@ class Blockchain():
         nextForger = self.pos.forger(lastBlockHash)
         return nextForger
 
-    def createBlock(self,transactionFromPool, forgerWallet):
+    def createBlock(self, transactionsFromPool, forgerWallet):
         coveredTransactions = self.getCoveredTransactionSet(
-            transactionFromPool)
+            transactionsFromPool)
         self.executeTransactions(coveredTransactions)
-        newBlock = forgerWallet.createBlock(coveredTransactions,BlockchainUtils.hash(
-            self.blocks[-1].payload()).hexdigest(),len(self.blocks))
+        newBlock = forgerWallet.createBlock(coveredTransactions, BlockchainUtils.hash(self.blocks[-1].payload()).hexdigest(), len(self.blocks))
         self.blocks.append(newBlock)
-        return newBlock    
+        return newBlock
 
-    def transactionExist(self, transaction):
+    def transactionExists(self, transaction):
         for block in self.blocks:
             for blockTransaction in block.transactions:
                 if transaction.equals(blockTransaction):
                     return True
+        return False
 
-    def forgerValid(self,block):
+    def forgerValid(self, block):
         forgerPublicKey = self.pos.forger(block.lastHash)
-        proposeBlockForger = block.forger
-        if forgerPublicKey == proposeBlockForger:
+        proposedBlockForger = block.forger
+        if forgerPublicKey == proposedBlockForger:
             return True
         else:
             return False
 
-    def transactionValid(self, transactions):
-        coveredTransaction = self.getCoveredTransactionSet(transactions)
-        if len(coveredTransaction)== len(transactions):
+    def transactionsValid(self, transactions):
+        coveredTransactions = self.getCoveredTransactionSet(transactions)
+        if len(coveredTransactions) == len(transactions):
             return True
-        return False 
+        return False

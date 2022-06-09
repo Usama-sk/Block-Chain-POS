@@ -8,6 +8,7 @@ class TransactionPool():
     def addTransaction(self, transaction):
         self.transactions.append(transaction)
 
+
     def transactionExists(self, transaction):
         for poolTransaction in self.transactions:
             if poolTransaction.equals(transaction):

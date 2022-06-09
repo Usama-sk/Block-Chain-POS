@@ -26,7 +26,7 @@ class NodeAPI(FlaskView):
     def blockchain(self):
         return node.blockchain.toJson(), 200
 
-    @route('/transactionPool', methods=['GET'])
+    @route('`/transactionPool`', methods=['GET'])
     def transactionPool(self):
         transactions = {}
         for ctr, transaction in enumerate(node.transactionPool.transactions):

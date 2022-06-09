@@ -4,6 +4,8 @@ from Block import Block
 from BlockchainUtils import BlockchainUtils
 from Crypto.Signature import PKCS1_v1_5
 
+from TransactionPool import TransactionPool
+
 
 class Wallet():
 
@@ -44,8 +46,7 @@ class Wallet():
         return transaction
 
     def createBlock(self, transactions, lastHash, blockCount):
-        block = Block(transactions, lastHash,
-                      self.publicKeyString(), blockCount)
+        block = Block(transactions, lastHash,self.publicKeyString(), blockCount)
         signature = self.sign(block.payload())
         block.sign(signature)
         return block
